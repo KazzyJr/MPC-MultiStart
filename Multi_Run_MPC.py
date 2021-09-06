@@ -40,25 +40,28 @@ class Time:
 
 def main():
 
-	time = sys.argv[1]
-	if time is None:
+	try:
+		time = sys.argv[1]
+	except IndexError:
 		time = 0
 
 	for i in files_sync_time.values():
 		end_time = Time(i).calculate_time_span(int(time))
 		keys = list(files_sync_time.keys())
 		values = list(files_sync_time.values())
-		cmd_complete = base_command + " \"" + keys[values.index(i)] + "\"" + arguments + end_time
+		cmd_complete = base_command + " \"" + keys[values.index(i)] + "\"" + argument1 + end_time + argument2
 		os.system(f'cmd /c "{cmd_complete}"')
 
 
 if __name__ == "__main__":
 	# Populated with a direct path to a video and a target time from which we will add or subtract time
 	files_sync_time = {
-		"D:\\Videos\\Testing Video\\Placeholder.mp4": "00:15:00"
+		"D:\\Videos\\Testing Video\\Placeholder.mp4": "00:15:00",
+		"D:\\Videos\\Testing Video\\Placeholders.mp4": "00:15:00"
 	}
 	# MPC path
 	base_command = "START \"C:\\Program Files (x86)\\K-Lite Codec Pack\\MPC-HC64\\\" mpc-hc64.exe"
-	arguments = " /startpos "
+	argument1 = " /startpos "
+	argument2 = " /new"
 	main()
 
