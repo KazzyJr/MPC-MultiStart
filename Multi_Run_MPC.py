@@ -41,6 +41,8 @@ class Time:
 def main():
 
 	time = sys.argv[1]
+	if time is None:
+		time = 0
 
 	for i in files_sync_time.values():
 		end_time = Time(i).calculate_time_span(int(time))
