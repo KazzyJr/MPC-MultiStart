@@ -3,7 +3,7 @@ from unittest.mock import call
 
 import pytest
 
-import Multi_Run_MPC as mpc
+from mpc import multi_run_mpc as mpc
 
 
 def test_time_class_ok():
