@@ -1,0 +1,9 @@
+{
+  "base_command" : "START \"C:\\Program Files (x86)\\K-Lite Codec Pack\\MPC-HC64\\\" mpc-hc64.exe",
+  "first_argument" : " /startpos ",
+  "second_argument" : " /new",
+  "path_to_movies_json" : "movies_template.json",
+  "time_offset" : "30",
+  "quiet" : true,
+  "dry_run" : false
+}
