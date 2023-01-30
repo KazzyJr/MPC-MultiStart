@@ -96,3 +96,28 @@ def test_load_configuration():
     assert mpc.CONFIGURATION.get('time_offset') == "60"
     assert mpc.CONFIGURATION.get('quiet') is True
     assert mpc.CONFIGURATION.get('dry_run') is False
+
+
+def test_build_commands():
+    # Given
+    file1 = 'path/to/file1.mp4'
+    file2 = 'path/to/file2.mp4'
+    time1 = '00:00:30'
+    time2 = '00:10:30'
+    time1_exp = '00:01:30'
+    time2_exp = '00:11:30'
+    mpc.CONFIGURATION['time_offset'] = 60
+    mpc.CONFIGURATION['quiet'] = True
+    mpc.CONFIGURATION['base_command'] = 'base'
+    mpc.CONFIGURATION['first_argument'] = ' first '
+    mpc.CONFIGURATION['second_argument'] = ' second'
+    expected = [f'base \"{file1}\" first {time1_exp} second',
+                f'base \"{file2}\" first {time2_exp} second']
+    a = mpc.Movie(file_path=file1, start_time=time1)
+    b = mpc.Movie(file_path=file2, start_time=time2)
+    # When
+    actual = mpc.build_commands()
+    # Then
+    assert a.new_start_time == time1_exp
+    assert b.new_start_time == time2_exp
+    assert actual == expected
