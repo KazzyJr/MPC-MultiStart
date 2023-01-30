@@ -63,3 +63,22 @@ def test_calculate_time_span_raises():
     with pytest.raises(ValueError):
         # When
         mpc.Time(initial_time).calculate_time_span(time_diff)
+
+
+def test_instantiate_movies():
+    # Given
+    file1 = 'path/to/file1.mp4'
+    file2 = 'path/to/file2.mp4'
+    time1 = '00:00:30'
+    time2 = '00:10:30'
+    # When
+    a = mpc.Movie(file_path=file1, start_time=time1)
+    b = mpc.Movie(file_path=file2, start_time=time2)
+    expected = [a, b]
+    # Then
+    assert a.start_time == time1
+    assert a.file_path == file1
+    assert b.start_time == time2
+    assert b.file_path == file2
+    assert mpc.Movie.all_movies == expected
+
