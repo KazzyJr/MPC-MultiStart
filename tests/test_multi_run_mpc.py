@@ -93,7 +93,7 @@ def test_instantiate_movies(capsys):
 
 def test_load_configuration():
     # Given
-    config_path = 'config.json'
+    config_path = './config.json'
     # When
     mpc.load_configuration(config_path)
     # Then
@@ -109,7 +109,7 @@ def test_load_configuration():
 def test_load_movies():
     # Given
     mpc.Movie.all_movies = []
-    json_path = pathlib.Path('movies.json')
+    json_path = pathlib.Path('./movies.json')
     file1 = 'file/path/movie1.mp4'
     file2 = 'file/path/movie2.mp4'
     file3 = 'file/path/movie3.mp4'
