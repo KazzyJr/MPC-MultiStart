@@ -82,3 +82,17 @@ def test_instantiate_movies():
     assert b.file_path == file2
     assert mpc.Movie.all_movies == expected
 
+
+def test_load_configuration():
+    # Given
+    config_path = 'config.json'
+    # When
+    mpc.load_configuration(config_path)
+    # Then
+    assert mpc.CONFIGURATION.get('base_command') == "MPC"
+    assert mpc.CONFIGURATION.get('first_argument') == " arg1 "
+    assert mpc.CONFIGURATION.get('second_argument') == " arg2"
+    assert mpc.CONFIGURATION.get('path_to_movies_json') == "movies.json"
+    assert mpc.CONFIGURATION.get('time_offset') == "60"
+    assert mpc.CONFIGURATION.get('quiet') is True
+    assert mpc.CONFIGURATION.get('dry_run') is False

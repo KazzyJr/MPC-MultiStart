@@ -81,10 +81,10 @@ class Movie:
 		       f'start time at {self.new_start_time}'
 
 
-def load_configuration():
+def load_configuration(config_path: str = 'config.json'):
 	"""Global configuration object setting"""
 	global CONFIGURATION
-	config_text = pathlib.Path('config.json').read_text(encoding='utf-8')
+	config_text = pathlib.Path(config_path).read_text(encoding='utf-8')
 	CONFIGURATION = json.loads(config_text)
 
 

@@ -1,0 +1,9 @@
+{
+  "base_command" : "MPC",
+  "first_argument" : " arg1 ",
+  "second_argument" : " arg2",
+  "path_to_movies_json" : "movies.json",
+  "time_offset" : "60",
+  "quiet" : true,
+  "dry_run" : false
+}
