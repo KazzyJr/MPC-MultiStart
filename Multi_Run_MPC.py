@@ -71,8 +71,8 @@ class Movie:
 		:param file_path: A path to the movie to be opened
 		:param start_time: A string representing the initial start time in HH:MM:SS format
 		"""
-		self.start_time = start_time
 		self.file_path = file_path
+		self.start_time = start_time
 		self.new_start_time = ''
 		Movie.all_movies.append(self)
 

@@ -1,3 +1,6 @@
+import pathlib
+from unittest.mock import call
+
 import pytest
 
 import Multi_Run_MPC as mpc
@@ -45,7 +48,8 @@ def test_time_class_raises(dummy_time):
         (600, "00:50:25", "01:00:25"),
         (3, "03:59:57", "04:00:00"),
         (-5, "00:05:04", "00:04:59"),
-        (-75, "00:01:30", "00:00:15")
+        (-75, "00:01:30", "00:00:15"),
+        (1, "11:24:35", "11:24:36")
     ]
 )
 def test_calculate_time_span_ok(time_diff, initial_time, expected):
@@ -65,7 +69,7 @@ def test_calculate_time_span_raises():
         mpc.Time(initial_time).calculate_time_span(time_diff)
 
 
-def test_instantiate_movies():
+def test_instantiate_movies(capsys):
     # Given
     file1 = 'path/to/file1.mp4'
     file2 = 'path/to/file2.mp4'
@@ -74,6 +78,8 @@ def test_instantiate_movies():
     # When
     a = mpc.Movie(file_path=file1, start_time=time1)
     b = mpc.Movie(file_path=file2, start_time=time2)
+    print(a)
+    captured = capsys.readouterr()
     expected = [a, b]
     # Then
     assert a.start_time == time1
@@ -81,6 +87,8 @@ def test_instantiate_movies():
     assert b.start_time == time2
     assert b.file_path == file2
     assert mpc.Movie.all_movies == expected
+    assert a.file_path in captured.out
+    assert a.start_time in captured.out
 
 
 def test_load_configuration():
@@ -98,8 +106,29 @@ def test_load_configuration():
     assert mpc.CONFIGURATION.get('dry_run') is False
 
 
+def test_load_movies():
+    # Given
+    mpc.Movie.all_movies = []
+    json_path = pathlib.Path('movies.json')
+    file1 = 'file/path/movie1.mp4'
+    file2 = 'file/path/movie2.mp4'
+    file3 = 'file/path/movie3.mp4'
+    time = "00:00:00"
+    # When
+    mpc.load_movies(json_path)
+    # Then
+    assert len(mpc.Movie.all_movies) == 3
+    assert mpc.Movie.all_movies[0].file_path == file1
+    assert mpc.Movie.all_movies[1].file_path == file2
+    assert mpc.Movie.all_movies[2].file_path == file3
+    assert mpc.Movie.all_movies[0].start_time == time
+    assert mpc.Movie.all_movies[1].start_time == time
+    assert mpc.Movie.all_movies[2].start_time == time
+
+
 def test_build_commands():
     # Given
+    mpc.Movie.all_movies = []
     file1 = 'path/to/file1.mp4'
     file2 = 'path/to/file2.mp4'
     time1 = '00:00:30'
@@ -121,3 +150,15 @@ def test_build_commands():
     assert a.new_start_time == time1_exp
     assert b.new_start_time == time2_exp
     assert actual == expected
+
+
+def test_start_execution(mocker):
+    # Given
+    mpc.CONFIGURATION['dry_run'] = False
+    patched_os = mocker.patch('os.system')
+    cmd_list = ['cmd1', 'cmd2', 'cmd3']
+    calls = [call('cmd /c "cmd1"'), call('cmd /c "cmd2"'), call('cmd /c "cmd3"')]
+    # When
+    mpc.start_execution(cmd_list)
+    # Then
+    patched_os.assert_has_calls(calls)
