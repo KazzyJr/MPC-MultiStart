@@ -6,6 +6,8 @@ import json
 import os
 import pathlib
 
+__version__ = "1.0.3"
+
 SECONDS_IN_HOUR = 3600
 SECONDS_IN_MINUTE = 60
 CONFIGURATION = {}
@@ -21,8 +23,14 @@ class Time:
 		"""
 		hour, minute, seconds = given_time.split(":")
 		self.hour = int(hour)
+		if self.hour < 0:
+			raise ValueError("Hours must be greater than or equal to 0")
 		self.minute = int(minute)
+		if self.minute < 0 or self.minute > 59:
+			raise ValueError("Minutes range between 0-59")
 		self.seconds = int(seconds)
+		if self.seconds < 0 or self.seconds > 59:
+			raise ValueError("Seconds range between 0-59")
 		self.list = [self.hour, self.minute, self.seconds]
 
 	string_condition: bool = False
